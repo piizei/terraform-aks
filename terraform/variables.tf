@@ -32,11 +32,17 @@ variable "default_pool_node_type" {
   description = "VM type of default nodepool"
   type        = string
   default     = "Standard_D2s_v3" 
-  #To figure out whats the cheapest VM type that supports ephemeral disks in your region, use https://ephemeraldisk.danielstechblog.de/api/ephemeraldisk?location=westeurope
+  #To figure out whats the cheapest VM type that supports ephemeral disks in your region,  use https://ephemeraldisk.danielstechblog.de/api/ephemeraldisk?location=westeurope
 }
 
 variable "default_pool_node_count" {
   description = "VM count of default nodepool"
   type        = number
-  default     = 1
+  default     = 1 #Set to number that makes sense for the Availability Zones as well (min 3 for 3 zones...)
+}
+
+variable "availability_zones" {
+  description = "AZs where nodepool vms are deployed"
+  type        = list(string)
+  default     = ["1"]
 }

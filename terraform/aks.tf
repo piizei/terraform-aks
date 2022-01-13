@@ -35,6 +35,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     vnet_subnet_id       = azurerm_subnet.aks.id
     type                 = "VirtualMachineScaleSets"
     orchestrator_version = var.kubernetes_version
+    availability_zones   = var.availability_zones
   }
 
   identity {
