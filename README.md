@@ -1,3 +1,3 @@
-# caf-testing
+# terraform-aks
 
-This repository is about experimenting with Azure Cloud Adoption Framework (CAF) Terraform modules https://github.com/Azure/caf-terraform-landingzones
+This repository is about experimenting with terraforming AKS (Azure Kubernetes Service)
