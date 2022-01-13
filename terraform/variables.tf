@@ -31,7 +31,8 @@ variable "kubernetes_version" {
 variable "default_pool_node_type" {
   description = "VM type of default nodepool"
   type        = string
-  default     = "Standard_B2ms"
+  default     = "Standard_D2s_v3" 
+  #To figure out whats the cheapest VM type that supports ephemeral disks in your region, use https://ephemeraldisk.danielstechblog.de/api/ephemeraldisk?location=westeurope
 }
 
 variable "default_pool_node_count" {
