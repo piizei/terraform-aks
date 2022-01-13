@@ -1,7 +1,8 @@
 locals {
   common_tags = {
-    environment = var.env
+    environment = var.environment
     owner       = var.owner
-    version     = var.version
+    version     = var.release_version
+
   }
 }

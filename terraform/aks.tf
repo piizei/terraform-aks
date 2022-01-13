@@ -3,7 +3,7 @@ data "http" "current_ip" {
 }
 
 data "namep_azure_name" "aksrg" {
-  name     = var.environment
+  name     = "aks"
   type     = "azurerm_resource_group"
 }
 
@@ -12,21 +12,27 @@ data "namep_azure_name" "aks" {
   type     = "azurerm_kubernetes_cluster"
 }
 
+resource "azurerm_resource_group" "aksrg" {
+  name = data.namep_azure_name.aksrg.result
+  location = var.location
+  tags = local.common_tags
+}
+
 resource "azurerm_kubernetes_cluster" "aks" {
-  resource_group_name = data.namep_azure_name.aksrg.result
+  resource_group_name = azurerm_resource_group.aksrg.name
   name                = data.namep_azure_name.aks.result
-  location            = var.location
-  tags                = locals.common_tags
+  location            = azurerm_resource_group.aksrg.location
+  tags                = local.common_tags
   dns_prefix          = var.environment
   kubernetes_version  = var.kubernetes_version
 
   default_node_pool {
-    name                 = "${var.workspace}pool"
+    name                 = "${var.environment}default"
     node_count           = var.default_pool_node_count
     vm_size              = var.default_pool_node_type
     os_disk_size_gb      = 30
-    os_disk_type.        = "Ephemeral"
-    vnet_subnet_id       = azurerm_subnet.akssubnet.id
+    os_disk_type         = "Ephemeral"
+    vnet_subnet_id       = azurerm_subnet.aks.id
     type                 = "VirtualMachineScaleSets"
     orchestrator_version = var.kubernetes_version
   }
@@ -46,7 +52,5 @@ resource "azurerm_kubernetes_cluster" "aks" {
   api_server_authorized_ip_ranges = [
     "${chomp(data.http.current_ip.body)}/32"
   ]
-  
-  tags = locals.common_tags
 
 }

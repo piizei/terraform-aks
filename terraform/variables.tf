@@ -4,19 +4,14 @@ variable "environment" {
   default     = "dev"
 }
 
-variable "subscription" {
-  description = "Id of the Azure subscription"
-  type        = string
-}
-
 variable "owner" {
   description = "Owner of the resource"
   type        = string
   default     = "n/a"
 }
 
-variable "version" {
-  description = "Version of the resource"
+variable "release_version" {
+  description = "Version of the infrastructure automation"
   type        = string
   default     = "latest"
 }
