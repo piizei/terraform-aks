@@ -46,3 +46,10 @@ variable "availability_zones" {
   type        = list(string)
   default     = ["1"]
 }
+
+variable "win_admin" {
+  description = "Admin username of the windows nodepool machines"
+  type        = string
+  default     = "Administrator"
+}
+

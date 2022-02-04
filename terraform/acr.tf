@@ -4,7 +4,7 @@ data "namep_azure_name" "acrrg" {
 }
 
 data "namep_azure_name" "acr" {
-  name     = var.environment
+  name     = "pj${var.environment}" # Needs to be unique (becomes FQDN)
   type     = "azurerm_container_registry"
 }
 
