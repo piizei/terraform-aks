@@ -49,7 +49,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   network_profile {
     network_plugin = "azure"
-    network_policy = "calico"
   }
 
   role_based_access_control {
@@ -62,34 +61,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
 }
 
-resource "azurerm_kubernetes_cluster_node_pool" "win" {
-  availability_zones    = var.availability_zones
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
-  mode                  = "User"
-  name                  = "${var.environment}win"
-  os_disk_size_gb       = 30
-  os_disk_type          = "Ephemeral"
-  os_type               = "Windows"
-  node_count            = var.default_pool_node_count
-  vm_size               = var.default_pool_node_type
-  vnet_subnet_id        = azurerm_subnet.aks.id
-  node_labels = {
-    "environment"   = var.environment
-    "nodepoolos"    = "windows"
-  }
-  tags = local.common_tags
-}
-
 # AKS access to ACR
 resource "azurerm_role_assignment" "acrpull" {
   scope                = azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
-  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-}
-
-#Calico role, maybe this should be actually vnet_contributor instead of contributor, but following https://docs.microsoft.com/en-us/azure/aks/use-network-policies
-resource "azurerm_role_assignment" "network_contributor" {
-  scope                = azurerm_virtual_network.vnet.id
-  role_definition_name = "Contributor"
   principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
 }

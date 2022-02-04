@@ -9,6 +9,11 @@ data "namep_azure_name" "akssubnet" {
   type     = "azurerm_subnet"
 }
 
+data "namep_azure_name" "appgwsubnet" {
+  name     = "aks"
+  type     = "azurerm_subnet"
+}
+
 data "namep_azure_name" "vnetrg" {
   name     = "vnet"
   type     = "azurerm_resource_group"
@@ -33,6 +38,15 @@ resource "azurerm_subnet" "aks" {
   name                                           = data.namep_azure_name.akssubnet.result
   resource_group_name                            = azurerm_resource_group.vnet.name
   address_prefixes                               = ["10.1.0.0/16"]
+  virtual_network_name                           = azurerm_virtual_network.vnet.name
+  service_endpoints                              = ["Microsoft.Storage"]
+  enforce_private_link_endpoint_network_policies = true
+}
+
+resource "azurerm_subnet" "appgw" {
+  name                                           = data.namep_azure_name.appgwsubnet.result
+  resource_group_name                            = azurerm_resource_group.vnet.name
+  address_prefixes                               = ["10.0.0.0/16"]
   virtual_network_name                           = azurerm_virtual_network.vnet.name
   service_endpoints                              = ["Microsoft.Storage"]
   enforce_private_link_endpoint_network_policies = true
