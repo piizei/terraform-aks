@@ -20,6 +20,7 @@ resource "azurerm_public_ip" "pip" {
   resource_group_name = azurerm_resource_group.aksrg.name
   location            = azurerm_resource_group.aksrg.location
   allocation_method   = "Static"
+  sku                 = "Standard"
   tags = local.common_tags
 }
 
@@ -119,25 +120,29 @@ resource "helm_release" "ingress_azure" {
   namespace    =  "ingress-agic"
 
   set {
-      name  = "subscriptionId"
+      name  = "appgw.subscriptionId"
       value =  data.azurerm_subscription.current.subscription_id
   }
   set {
-      name  = "resourceGroup"
+      name  = "appgw.resourceGroup"
       value =  azurerm_resource_group.aksrg.name
   }
   set {
-      name  = "applicationgateway_name"
+      name  = "appgw.name"
       value =  azurerm_application_gateway.appgw.name
   }
   set {
-      name  = "identityResourceID"
+      name  = "armAuth.type"
+      value = "aadPodIdentity"
+  }
+  set {
+      name  = "armAuth.identityResourceID"
       value =  azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   }
   set {
-      name  = "identityClientId"
+      name  = "armAuth.identityClientID"
       value =  azurerm_kubernetes_cluster.aks.kubelet_identity[0].client_id
   }
 
-  depends_on = [kubernetes_namespace.agic]
+  depends_on = [kubernetes_namespace.agic, helm_release.aad_pod_identity_release]
 }

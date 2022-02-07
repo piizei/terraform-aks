@@ -48,7 +48,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   network_profile {
-    network_plugin = "azure"
+    network_plugin     = "azure"
+    service_cidr       = "10.0.3.0/24"
+    dns_service_ip     = "10.0.3.10"
+    docker_bridge_cidr = "172.0.0.1/8"
   }
 
   role_based_access_control {
@@ -59,6 +62,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
     "${chomp(data.http.current_ip.body)}/32"
   ]
 
+  depends_on = [ azurerm_public_ip.pip ]
+
 }
 
 # AKS access to ACR
@@ -66,4 +71,21 @@ resource "azurerm_role_assignment" "acrpull" {
   scope                = azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
   principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+}
+
+resource "kubernetes_cluster_role" "all_can_list_namespaces" {
+  depends_on = [azurerm_kubernetes_cluster.aks]
+  metadata {
+    name = "list-namespaces"
+  }
+
+  rule {
+    api_groups = ["*"]
+    resources = [
+      "namespaces"
+    ]
+    verbs = [
+      "list",
+    ]
+  }
 }
