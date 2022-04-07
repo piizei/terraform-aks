@@ -10,7 +10,8 @@ provider "namep" {
 }
 
 provider "azurerm" {
-  features {}
+  features {    
+  }
 }
 
 data "azurerm_subscription" "current" {}

@@ -35,7 +35,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     vnet_subnet_id       = azurerm_subnet.aks.id
     type                 = "VirtualMachineScaleSets"
     orchestrator_version = var.kubernetes_version
-    availability_zones   = var.availability_zones
+    zones                = var.availability_zones
   }
 
   identity {
@@ -46,9 +46,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin = "azure"
   }
 
-  role_based_access_control {
-    enabled = true
-  }
+  role_based_access_control_enabled = true
 
   api_server_authorized_ip_ranges = [
     "${chomp(data.http.current_ip.body)}/32"
