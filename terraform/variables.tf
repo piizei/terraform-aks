@@ -25,7 +25,7 @@ variable "location" {
 variable "kubernetes_version" {
   description = "Kubernetes version of AKS"
   type        = string
-  default     = "1.22.4"
+  default     = "1.23.3"
 }
 
 variable "default_pool_node_type" {
@@ -45,4 +45,21 @@ variable "availability_zones" {
   description = "AZs where nodepool vms are deployed"
   type        = list(string)
   default     = ["1"]
+}
+
+variable "flux_git_uri" {
+  description = "Flux git uri"
+  type        = string
+  default     = "https://github.com/piizei/terraform-aks"
+}
+
+variable "flux_git_branch" {
+  description = "Flux git branch"
+  type        = string
+  default     = "fluxv2"
+}
+
+variable "flux_token" {
+  description = "Flux git token"
+  type        = string
 }

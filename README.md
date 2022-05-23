@@ -5,8 +5,11 @@ This repository is about experimenting with terraforming AKS (Azure Kubernetes S
 It contains different implementations of AKS in different branches like:
 * calico (with windows pool)
 * agic (Application Gateway Ingress Controller)
+* GitOps with Flux v2
 
 
 ### Notes
 
 Calico needs registering it to windows pools for your subscription: az feature register --namespace "Microsoft.ContainerService" --name "EnableAKSWindowsCalico"
+
+Flux needs access to your git, export TF_VAR_flux_token as github-token/azure-devops-pat before running it.
