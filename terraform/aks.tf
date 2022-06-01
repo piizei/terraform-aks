@@ -25,6 +25,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   tags                = local.common_tags
   dns_prefix          = var.environment
   kubernetes_version  = var.kubernetes_version
+  oidc_issuer_enabled = true
 
   default_node_pool {
     name                 = "${var.environment}default"

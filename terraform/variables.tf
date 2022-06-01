@@ -46,3 +46,27 @@ variable "availability_zones" {
   type        = list(string)
   default     = ["1"]
 }
+
+variable "use_app_reg" {
+  description = "Use pre-created app-registration"
+  type        = bool
+  default     = false
+}
+
+variable "app_reg_app_id" {
+  description = "application/client -id of the pre-created app-registration"
+  type        = string
+  default     = "123"
+}
+
+variable "app_reg_object_id" {
+  description = "Object-id of the pre-created app-registration"
+  type        = string
+  default     = "123"
+}
+
+variable "create_federated_credentials" {
+  description = "Create federated credentials with terraform (requires permissions to th SP)"
+  type        = bool
+  default     = true
+  }
