@@ -25,7 +25,7 @@ variable "location" {
 variable "kubernetes_version" {
   description = "Kubernetes version of AKS"
   type        = string
-  default     = "1.22.4"
+  default     = "1.21.9"
 }
 
 variable "default_pool_node_type" {
